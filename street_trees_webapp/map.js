@@ -104,18 +104,23 @@ const filterTrees = () => {
     geojson = createData(trees);
 
     // create the filtered trees layer based on the dropdown value
-    var filtered_trees = [];
-    var filtered_json = JSON.parse(JSON.stringify(trees));
     var value = document.getElementById("dropdown").value;
-    for (tree of trees.features) {
-        common_name = tree.properties.common_name
-        if (value == common_name) {
-            filtered_trees.push(tree);
+
+    if (value != "all") {
+        var filtered_trees = [];
+        var filtered_json = JSON.parse(JSON.stringify(trees));
+
+        for (tree of trees.features) {
+            common_name = tree.properties.common_name
+            if (value == common_name) {
+                filtered_trees.push(tree);
+            }
         }
+        // update the filtered object's features
+        filtered_json.features = filtered_trees;
+        geojson = createData(filtered_json);
     }
-    // update the filtered object's features
-    filtered_json.features = filtered_trees;
-    geojson = createData(filtered_json);
+
 
     // add to map and refresh view
     geojson.addTo(map);
